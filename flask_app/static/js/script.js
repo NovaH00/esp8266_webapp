@@ -13,10 +13,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Update connectivity status
                 if (statusIndicator) {
                     if (data.online) {
-                        statusIndicator.textContent = 'Connected';
+                        statusIndicator.textContent = 'Đã Kết Nối';
                         statusIndicator.className = 'status-indicator connected';
                     } else {
-                        statusIndicator.textContent = 'Disconnected';
+                        statusIndicator.textContent = 'Mất Kết Nối';
                         statusIndicator.className = 'status-indicator disconnected';
                     }
                 }
@@ -27,14 +27,31 @@ document.addEventListener('DOMContentLoaded', function () {
                         // Skip non-display fields
                         if (key === 'online' || key === 'last_update') return;
 
-                        // Find the row for this key
-                        const formattedKey = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                        // Find the row for this key based on the Vietnamese translation
                         const rows = Array.from(systemInfoTable.querySelectorAll('tr'));
-                        const row = rows.find(r => r.cells[0].textContent.includes(formattedKey));
+                        let row = null;
+
+                        // Match rows by key-specific text
+                        switch (key) {
+                            case 'chip_id': row = rows.find(r => r.cells[0].textContent.includes('ID Chip')); break;
+                            case 'cpu_frequency': row = rows.find(r => r.cells[0].textContent.includes('Tần Số CPU')); break;
+                            case 'free_heap': row = rows.find(r => r.cells[0].textContent.includes('Bộ Nhớ Heap')); break;
+                            case 'sketch_size': row = rows.find(r => r.cells[0].textContent.includes('Kích Thước Sketch')); break;
+                            case 'flash_chip_size': row = rows.find(r => r.cells[0].textContent.includes('Kích Thước Chip Flash')); break;
+                            case 'flash_chip_speed': row = rows.find(r => r.cells[0].textContent.includes('Tốc Độ Chip Flash')); break;
+                            case 'sdk_version': row = rows.find(r => r.cells[0].textContent.includes('Phiên Bản SDK')); break;
+                            case 'reset_reason': row = rows.find(r => r.cells[0].textContent.includes('Lý Do Khởi Động Lại')); break;
+                            case 'rssi': row = rows.find(r => r.cells[0].textContent.includes('Tín Hiệu WiFi')); break;
+                            case 'uptime': row = rows.find(r => r.cells[0].textContent.includes('Thời Gian Hoạt Động')); break;
+                            case 'temperature': row = rows.find(r => r.cells[0].textContent.includes('Nhiệt Độ')); break;
+                            case 'ip_address': row = rows.find(r => r.cells[0].textContent.includes('Địa Chỉ IP')); break;
+                            case 'mac_address': row = rows.find(r => r.cells[0].textContent.includes('Địa Chỉ MAC')); break;
+                            case 'random_value': row = rows.find(r => r.cells[0].textContent.includes('Giá Trị Ngẫu Nhiên')); break;
+                        }
 
                         if (row) {
                             // Format WiFi signal strength with visual indicator
-                            if (key === 'rssi' && data[key] !== 'Unknown') {
+                            if (key === 'rssi' && data[key] !== 'Không Xác Định') {
                                 const rssiValue = parseInt(data[key]);
                                 let signalClass = '';
 
@@ -51,9 +68,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             })
             .catch(error => {
-                console.error('Error fetching system info:', error);
+                console.error('Lỗi khi tải thông tin hệ thống:', error);
                 if (statusIndicator) {
-                    statusIndicator.textContent = 'Connection Error';
+                    statusIndicator.textContent = 'Lỗi Kết Nối';
                     statusIndicator.className = 'status-indicator error';
                 }
             });
@@ -74,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     apiResult.style.display = 'block';
                 })
                 .catch(error => {
-                    apiResult.textContent = 'Error: ' + error.message;
+                    apiResult.textContent = 'Lỗi: ' + error.message;
                     apiResult.style.display = 'block';
                 });
         });

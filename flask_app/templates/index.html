@@ -2,76 +2,76 @@
 
 {% block content %}
 <section class="hero">
-    <h2>System Information Monitor</h2>
-    <p>Current system metrics are displayed below.</p>
+    <h2>Giám Sát Thông Tin Hệ Thống</h2>
+    <p>Các chỉ số hệ thống hiện tại được hiển thị bên dưới.</p>
 
     <div class="system-info-container">
-        <h3>System Information
-            <span class="update-indicator">(Updates automatically)</span>
-            <span class="status-indicator">Checking...</span>
+        <h3>Thông Tin Hệ Thống
+            <span class="update-indicator">(Tự động cập nhật)</span>
+            <span class="status-indicator">Đang kiểm tra...</span>
         </h3>
         <table class="system-info">
             <tr>
-                <td>Chip ID:</td>
+                <td>ID Chip:</td>
                 <td>{{ system_info.chip_id }}</td>
             </tr>
             <tr>
-                <td>CPU Frequency:</td>
+                <td>Tần Số CPU:</td>
                 <td>{{ system_info.cpu_frequency }}</td>
             </tr>
             <tr>
-                <td>Free Heap:</td>
+                <td>Bộ Nhớ Heap Còn Trống:</td>
                 <td>{{ system_info.free_heap }}</td>
             </tr>
             <tr>
-                <td>Sketch Size:</td>
+                <td>Kích Thước Sketch:</td>
                 <td>{{ system_info.sketch_size }}</td>
             </tr>
             <tr>
-                <td>Flash Chip Size:</td>
+                <td>Kích Thước Chip Flash:</td>
                 <td>{{ system_info.flash_chip_size }}</td>
             </tr>
             <tr>
-                <td>Flash Chip Speed:</td>
+                <td>Tốc Độ Chip Flash:</td>
                 <td>{{ system_info.flash_chip_speed }}</td>
             </tr>
             <tr>
-                <td>SDK Version:</td>
+                <td>Phiên Bản SDK:</td>
                 <td>{{ system_info.sdk_version }}</td>
             </tr>
             <tr>
-                <td>Reset Reason:</td>
+                <td>Lý Do Khởi Động Lại:</td>
                 <td>{{ system_info.reset_reason }}</td>
             </tr>
             <!-- New metrics -->
             <tr>
-                <td>WiFi Signal (RSSI):</td>
+                <td>Tín Hiệu WiFi (RSSI):</td>
                 <td>{{ system_info.rssi }}</td>
             </tr>
             <tr>
-                <td>Uptime:</td>
+                <td>Thời Gian Hoạt Động:</td>
                 <td>{{ system_info.uptime }}</td>
             </tr>
             <tr>
-                <td>Temperature:</td>
+                <td>Nhiệt Độ:</td>
                 <td>{{ system_info.temperature }}</td>
             </tr>
             <tr>
-                <td>IP Address:</td>
+                <td>Địa Chỉ IP:</td>
                 <td>{{ system_info.ip_address }}</td>
             </tr>
             <tr>
-                <td>MAC Address:</td>
+                <td>Địa Chỉ MAC:</td>
                 <td>{{ system_info.mac_address }}</td>
             </tr>
             <tr>
-                <td>Random Value:</td>
+                <td>Giá Trị Ngẫu Nhiên:</td>
                 <td>{{ system_info.random_value }}</td>
             </tr>
         </table>
     </div>
 
-    <button id="api-btn">Test API</button>
+    <button id="api-btn">Kiểm Tra API</button>
     <div id="api-result"></div>
 </section>
 {% endblock %}

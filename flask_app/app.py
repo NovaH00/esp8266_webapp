@@ -10,21 +10,21 @@ SYSTEM_INFO_FILE = os.path.join(os.path.dirname(__file__), 'system_info.json')
 
 # Default system info
 default_system_info = {
-    "chip_id": "Unknown",
-    "cpu_frequency": "Unknown",
-    "free_heap": "Unknown",
-    "sketch_size": "Unknown",
-    "flash_chip_size": "Unknown",
-    "flash_chip_speed": "Unknown",
-    "sdk_version": "Unknown",
-    "reset_reason": "Unknown",
+    "chip_id": "Không Xác Định",
+    "cpu_frequency": "Không Xác Định",
+    "free_heap": "Không Xác Định",
+    "sketch_size": "Không Xác Định",
+    "flash_chip_size": "Không Xác Định",
+    "flash_chip_speed": "Không Xác Định",
+    "sdk_version": "Không Xác Định",
+    "reset_reason": "Không Xác Định",
     # New fields
-    "rssi": "Unknown",
-    "uptime": "Unknown",
-    "temperature": "Unknown",
-    "ip_address": "Unknown",
-    "mac_address": "Unknown",
-    "random_value": "Unknown",
+    "rssi": "Không Xác Định",
+    "uptime": "Không Xác Định",
+    "temperature": "Không Xác Định",
+    "ip_address": "Không Xác Định",
+    "mac_address": "Không Xác Định",
+    "random_value": "Không Xác Định",
     # Status tracking
     "last_update": 0,
     "online": False
@@ -47,7 +47,7 @@ def get_system_info():
                     # When offline, set values to Unknown
                     for key in default_system_info:
                         if key not in ['last_update', 'online']:
-                            data[key] = "Unknown"
+                            data[key] = "Không Xác Định"
                 
                 return data
         except Exception:
@@ -66,11 +66,11 @@ def save_system_info(data):
 @app.route('/')
 def home():
     system_info = get_system_info()
-    return render_template('index.html', title='System Monitor', system_info=system_info)
+    return render_template('index.html', title='Giám Sát Hệ Thống', system_info=system_info)
 
 @app.route('/api/hello')
 def hello_api():
-    return jsonify({"message": "Hello from Flask!"})
+    return jsonify({"message": "Xin chào từ Flask!"})
 
 @app.route('/api/system-info')
 def system_info_api():
@@ -100,7 +100,7 @@ def update_system_info():
             "random_value": request.form.get('random_value', default_system_info['random_value'])
         }
         save_system_info(data)
-        return jsonify({"status": "success", "message": "System information updated"})
+        return jsonify({"status": "success", "message": "Thông tin hệ thống đã được cập nhật"})
 
 if __name__ == '__main__':
     app.run(debug=True)
