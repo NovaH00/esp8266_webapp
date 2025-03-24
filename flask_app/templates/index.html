@@ -6,7 +6,10 @@
     <p>Current system metrics are displayed below.</p>
 
     <div class="system-info-container">
-        <h3>System Information <span class="update-indicator">(Updates automatically)</span></h3>
+        <h3>System Information
+            <span class="update-indicator">(Updates automatically)</span>
+            <span class="status-indicator">Checking...</span>
+        </h3>
         <table class="system-info">
             <tr>
                 <td>Chip ID:</td>
@@ -39,6 +42,31 @@
             <tr>
                 <td>Reset Reason:</td>
                 <td>{{ system_info.reset_reason }}</td>
+            </tr>
+            <!-- New metrics -->
+            <tr>
+                <td>WiFi Signal (RSSI):</td>
+                <td>{{ system_info.rssi }}</td>
+            </tr>
+            <tr>
+                <td>Uptime:</td>
+                <td>{{ system_info.uptime }}</td>
+            </tr>
+            <tr>
+                <td>Temperature:</td>
+                <td>{{ system_info.temperature }}</td>
+            </tr>
+            <tr>
+                <td>IP Address:</td>
+                <td>{{ system_info.ip_address }}</td>
+            </tr>
+            <tr>
+                <td>MAC Address:</td>
+                <td>{{ system_info.mac_address }}</td>
+            </tr>
+            <tr>
+                <td>Random Value:</td>
+                <td>{{ system_info.random_value }}</td>
             </tr>
         </table>
     </div>

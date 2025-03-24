@@ -2,47 +2,61 @@ document.addEventListener('DOMContentLoaded', function () {
     const apiBtn = document.getElementById('api-btn');
     const apiResult = document.getElementById('api-result');
     const systemInfoTable = document.querySelector('.system-info');
-    const refreshInterval = 1000; // Update every 10 seconds
+    const statusIndicator = document.querySelector('.status-indicator');
+    const refreshInterval = 1000; // Update every second
 
     // Function to update system info
     function updateSystemInfo() {
         fetch('/api/system-info')
             .then(response => response.json())
             .then(data => {
+                // Update connectivity status
+                if (statusIndicator) {
+                    if (data.online) {
+                        statusIndicator.textContent = 'Connected';
+                        statusIndicator.className = 'status-indicator connected';
+                    } else {
+                        statusIndicator.textContent = 'Disconnected';
+                        statusIndicator.className = 'status-indicator disconnected';
+                    }
+                }
+
                 // Update each row in the system info table
                 if (systemInfoTable) {
                     Object.keys(data).forEach(key => {
-                        const row = systemInfoTable.querySelector(`tr td:first-child:contains("${key.replace('_', ' ')}:")`);
+                        // Skip non-display fields
+                        if (key === 'online' || key === 'last_update') return;
+
+                        // Find the row for this key
+                        const formattedKey = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                        const rows = Array.from(systemInfoTable.querySelectorAll('tr'));
+                        const row = rows.find(r => r.cells[0].textContent.includes(formattedKey));
+
                         if (row) {
-                            row.nextElementSibling.textContent = data[key];
+                            // Format WiFi signal strength with visual indicator
+                            if (key === 'rssi' && data[key] !== 'Unknown') {
+                                const rssiValue = parseInt(data[key]);
+                                let signalClass = '';
+
+                                if (rssiValue > -65) signalClass = 'signal-strong';
+                                else if (rssiValue > -80) signalClass = 'signal-medium';
+                                else signalClass = 'signal-weak';
+
+                                row.cells[1].innerHTML = `<span class="${signalClass}">${data[key]}</span>`;
+                            } else {
+                                row.cells[1].textContent = data[key];
+                            }
                         }
                     });
                 }
             })
-            .catch(error => console.error('Error fetching system info:', error));
-    }
-
-    // Add selector function for text content matching
-    if (!Element.prototype.matches) {
-        Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
-    }
-    if (!document.querySelector(':contains')) {
-        document.querySelector = (function (querySelector) {
-            return function (selector) {
-                if (selector.includes(':contains')) {
-                    const parts = selector.split(':contains(');
-                    const textToMatch = parts[1].slice(0, -1);
-                    const elements = document.querySelectorAll(parts[0]);
-                    for (const el of elements) {
-                        if (el.textContent.includes(textToMatch)) {
-                            return el;
-                        }
-                    }
-                    return null;
+            .catch(error => {
+                console.error('Error fetching system info:', error);
+                if (statusIndicator) {
+                    statusIndicator.textContent = 'Connection Error';
+                    statusIndicator.className = 'status-indicator error';
                 }
-                return querySelector.call(this, selector);
-            };
-        })(document.querySelector);
+            });
     }
 
     // Start periodic updates

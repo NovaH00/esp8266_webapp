@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify, request
 import json
 import os
+import time
 
 app = Flask(__name__)
 
@@ -16,21 +17,49 @@ default_system_info = {
     "flash_chip_size": "Unknown",
     "flash_chip_speed": "Unknown",
     "sdk_version": "Unknown",
-    "reset_reason": "Unknown"
+    "reset_reason": "Unknown",
+    # New fields
+    "rssi": "Unknown",
+    "uptime": "Unknown",
+    "temperature": "Unknown",
+    "ip_address": "Unknown",
+    "mac_address": "Unknown",
+    "random_value": "Unknown",
+    # Status tracking
+    "last_update": 0,
+    "online": False
 }
+
+# Time in seconds after which the ESP is considered offline
+OFFLINE_THRESHOLD = 10
 
 def get_system_info():
     """Get stored system information or return defaults"""
     if os.path.exists(SYSTEM_INFO_FILE):
         try:
             with open(SYSTEM_INFO_FILE, 'r') as f:
-                return json.load(f)
+                data = json.load(f)
+                
+                # Check if the data is stale
+                current_time = time.time()
+                if current_time - data.get('last_update', 0) > OFFLINE_THRESHOLD:
+                    data['online'] = False
+                    # When offline, set values to Unknown
+                    for key in default_system_info:
+                        if key not in ['last_update', 'online']:
+                            data[key] = "Unknown"
+                
+                return data
         except Exception:
             return default_system_info
     return default_system_info
 
 def save_system_info(data):
     """Save system information to file"""
+    # Add timestamp and set as online
+    data['last_update'] = time.time()
+    data['online'] = True
+    
     with open(SYSTEM_INFO_FILE, 'w') as f:
         json.dump(data, f)
 
@@ -61,7 +90,14 @@ def update_system_info():
             "flash_chip_size": request.form.get('flash_chip_size', default_system_info['flash_chip_size']),
             "flash_chip_speed": request.form.get('flash_chip_speed', default_system_info['flash_chip_speed']),
             "sdk_version": request.form.get('sdk_version', default_system_info['sdk_version']),
-            "reset_reason": request.form.get('reset_reason', default_system_info['reset_reason'])
+            "reset_reason": request.form.get('reset_reason', default_system_info['reset_reason']),
+            # New fields
+            "rssi": request.form.get('rssi', default_system_info['rssi']),
+            "uptime": request.form.get('uptime', default_system_info['uptime']),
+            "temperature": request.form.get('temperature', default_system_info['temperature']),
+            "ip_address": request.form.get('ip_address', default_system_info['ip_address']),
+            "mac_address": request.form.get('mac_address', default_system_info['mac_address']),
+            "random_value": request.form.get('random_value', default_system_info['random_value'])
         }
         save_system_info(data)
         return jsonify({"status": "success", "message": "System information updated"})

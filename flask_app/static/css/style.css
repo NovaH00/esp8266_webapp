@@ -101,3 +101,40 @@ footer {
     font-weight: normal;
     font-style: italic;
 }
+
+.status-indicator {
+    font-size: 0.8em;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 10px;
+    display: inline-block;
+}
+
+.status-indicator.connected {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.status-indicator.disconnected {
+    background-color: #f44336;
+    color: white;
+}
+
+.status-indicator.error {
+    background-color: #ff9800;
+    color: white;
+}
+
+/* Signal strength indicators */
+.signal-strong {
+    color: #4CAF50;
+}
+
+.signal-medium {
+    color: #ff9800;
+}
+
+.signal-weak {
+    color: #f44336;
+}
