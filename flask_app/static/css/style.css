@@ -94,3 +94,10 @@ footer {
     font-weight: bold;
     width: 40%;
 }
+
+.update-indicator {
+    font-size: 0.8em;
+    color: #0066cc;
+    font-weight: normal;
+    font-style: italic;
+}

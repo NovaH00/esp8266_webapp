@@ -43,6 +43,12 @@ def home():
 def hello_api():
     return jsonify({"message": "Hello from Flask!"})
 
+@app.route('/api/system-info')
+def system_info_api():
+    """API endpoint to return current system information as JSON"""
+    system_info = get_system_info()
+    return jsonify(system_info)
+
 @app.route('/update', methods=['POST'])
 def update_system_info():
     """Endpoint to receive and store system information"""
