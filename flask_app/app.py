@@ -100,7 +100,7 @@ def update_system_info():
             "random_value": request.form.get('random_value', default_system_info['random_value'])
         }
         save_system_info(data)
-        return jsonify({"status": "success", "message": "Thông tin hệ thống đã được cập nhật"})
+        return jsonify({"status": "success", "message": "Update information successfully"})
 
 if __name__ == '__main__':
     app.run(debug=True)
